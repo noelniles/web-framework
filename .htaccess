@@ -1,0 +1,11 @@
+Options -Multiviews
+
+RewriteEngine On
+RewriteBase /
+
+# Specify search friendly URLs
+RewriteRule ^home$ /web-framework/index.php [L]
+RewriteRule ^projects$ /web-framework/index.php?page=projects [L]
+RewriteRule ^github$ /web-framework/index.php?page=github [L]
+RewriteRule ^experiments$ /web-framework/index.php?page=experiments [L]
+RewriteRule ^resume$ /web-framework/index.php?page=resume [L]
