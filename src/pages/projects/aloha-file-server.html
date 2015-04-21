@@ -1,0 +1,321 @@
+<div class="section">
+<h3 class="title thin red-text text-darken-4">Aloha File Server</h3>
+<p class="flow-text">As an assignment for my Data Communications class I wrote a client/server
+program in Java. The major hurdles were figuring out where and how to catch
+errors without catastrophically crashing the program.
+</p>
+
+<p class="flow-text">I found the best strategy for catching exceptions is to catch them as close
+to the point where they occured. For example, in the Aloha File Server there
+is an AlohaSocket class that manages all of the connection setup and 
+message/response handling. The classes utilize AlohaSocket shouldn't need to 
+try/catch a bunch of errors which is what would happen if AlohaSocket just 
+throws errors to the caller instead of dealing with them.
+<p>
+</div>
+<div class="section">
+<h6 class="thin">AlohaSocket.java</h6>
+<pre title="AlohaSocket.java">
+<code title="AlohaSocket.java" class="language-java">
+package com.noelniles.alohafileserver;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+
+public class AlohaSocket {
+  private Socket socket;
+  private DataInputStream input;
+  private DataOutputStream output;
+
+  AlohaSocket(InetAddress acceptorHost, int acceptorPort) {
+    try {
+      socket = new Socket(acceptorHost, acceptorPort);
+    } catch (IOException e) {
+      System.out.println(res.str("err.IOEXCEPT"));
+      e.printStackTrace();
+    } catch (SecurityException e) {
+      System.out.println(res.str("err.SECEXCEPT"));
+    } catch (IllegalArgumentException e) {
+      System.out.println(res.str("err.PORT"));
+    } catch (NullPointerException e) {
+      System.out.println("***ERROR: Address can't be empty");
+    }
+    setStreams();
+  }
+
+  AlohaSocket(Socket socket) {
+    this.socket = socket;
+    setStreams();
+  }
+
+  // Gets an input stream for reading from the data socket
+  private void setStreams() {
+    try {
+      input = new DataInputStream(socket.getInputStream());
+    } catch (IOException e) {
+      System.out.println(res.str("err.INSTRM")); //$NON-NLS-1$
+      e.printStackTrace();
+    }
+    try {
+      output = new DataOutputStream(socket.getOutputStream());
+    } catch (IOException e) {
+      System.out.println(res.str("err.OUTSTRM")); //$NON-NLS-1$
+      e.printStackTrace();
+    }
+  }
+
+  public void sendMessage(String message) {
+    try {
+      output.writeUTF(message);
+      output.flush();
+    } catch (IOException e) {
+      System.out.println(res.str("err.SNDMSG")); //$NON-NLS-1$
+      e.printStackTrace();
+    }
+  } // end sendMessage
+
+  public String receiveMessage() {
+    String message = new String();
+    try {
+      message = input.readUTF();
+    } catch (IOException e) {
+      System.out.println(res.str("err.RCVMSG")); //$NON-NLS-1$
+      e.printStackTrace();
+    }
+    return message;
+  } // end receiveMessage
+
+  public void close() {
+    try {
+      socket.close();
+    } catch (IOException e) {
+      System.out.println(res.str("err.CLOSE")); //$NON-NLS-1$
+      e.printStackTrace();
+    }
+  }
+
+  public void sendFile(File file) throws IOException {
+    FileInputStream fileIn = new FileInputStream(file);
+    byte[] buf = new byte[Short.MAX_VALUE];
+    int bytesRead;
+    while ((bytesRead = fileIn.read(buf)) != -1) {
+      output.writeShort(bytesRead);
+      output.write(buf, 0, bytesRead);
+    }
+    output.writeShort(-1);
+    fileIn.close();
+  }
+
+  public void receiveFile(File file) {
+    FileOutputStream fileOut = null;
+
+    try {
+      fileOut = new FileOutputStream(file);
+    } catch (FileNotFoundException e) {
+      System.out.println(res.str("err.FILENOTFOUND")); //$NON-NLS-1$
+      e.printStackTrace();
+    }
+    byte[] buf = new byte[Short.MAX_VALUE];
+
+    int bytesSent = 0;
+
+    try {
+      while ((bytesSent = input.readShort()) != -1) {
+        try {
+          input.readFully(buf, 0, bytesSent);
+
+        } catch (EOFException e) {
+          System.out.println(res.str("err.EOF")); //$NON-NLS-1$
+          e.printStackTrace();
+
+        } catch (IOException e) {
+          System.out.println(res.str("err.STRMCLOSED")); //$NON-NLS-1$
+        }
+
+        try {
+          fileOut.write(buf, 0, bytesSent);
+
+        } catch (IOException e) {
+          System.out.println(res.str("err.WRTFILE")); //$NON-NLS-1$
+          e.printStackTrace();
+        }
+      }
+    } catch (EOFException e) {
+      System.out.println(res.str("err.EOS")); //$NON-NLS-1$
+
+    } catch (IOException e) {
+      System.out.println(res.str("err.READIN")); //$NON-NLS-1$
+    }
+  }
+}
+</code>
+</pre>
+</div>
+
+<div class="section">
+<h6 class="thin">AlohaServer.java</h6>
+<pre><code class="language-java">
+package com.noelniles.alohafileserver;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.util.UUID;
+
+public class AlohaServer {
+  //This should be 1024-65535 because lower ports are used by many common programs
+  private static int serverPort = Integer.parseInt(res.str("addr.PORT")); //$NON-NLS-1$
+  
+  //Holds responses that are sent to the client
+  private static String message;
+
+  // Generates a unique name
+  private static String uniqName() {
+    UUID uuid = UUID.randomUUID();
+    return res.str("path.SRVFILES") //$NON-NLS-1$
+        + "-" + uuid + ".txt";
+  }
+
+  public static void main(String[] args) {
+
+    if (args.length == 1) {
+      serverPort = Integer.parseInt(args[0]);
+    }
+    
+    // Uses try-with-resources so there is no need to call close() on the socket.
+    try (ServerSocket socket = new ServerSocket(serverPort)) {
+      System.out.println(res.str("usr.SRVRDY")); //$NON-NLS-1$
+
+      while (true) {
+        // wait to accept a connection
+        System.out.println(res.str("usr.SRVWAITING")); //$NON-NLS-1$
+
+        AlohaSocket stream = null;
+        try {
+          stream = new AlohaSocket(socket.accept());
+        } catch (IOException e) {
+          System.out.println(res.str("err.IOEXCEPT")); //$NON-NLS-1$
+          e.printStackTrace();
+        } catch (SecurityException e) {
+          System.out.println(res.str("err.SECEXCEPT") + ""); //$NON-NLS-1$                                      
+        }
+        
+        // Connection succeeded
+        System.out.println(res.str("conn.SUCCESS")); //$NON-NLS-1$
+
+        boolean done = false;
+        while (!done) {
+          // Receives a message from the client. The server is expecting an "aloha" message.
+          message = (stream.receiveMessage()).trim();
+
+          // Checks for "aloha" message. Responds with "welcome". 
+          // Then receives a file from the client.
+          if (message.equals("aloha")) {
+            stream.sendMessage("welcome");
+            File outFile = new File(uniqName());
+            stream.receiveFile(outFile);
+            stream.sendMessage("Your file named " + outFile + " with the size " + outFile.length()
+                + " bytes has been uploaded correctly.");
+            done = true;
+          }
+        } // End while !done
+      } // End endless while
+    } catch (IOException ex) {
+      System.out.println(res.str("err.ADDR") //$NON-NLS-1$
+          + serverPort);
+      ex.printStackTrace();
+    }
+  } // end main
+}
+</code>
+</pre>
+</div>
+
+<div class="section">
+<h6 class="thin">AlohaClient.java</h6>
+<pre><code class="language-java">
+package com.noelniles.alohafileserver;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStreamReader;
+import java.net.InetAddress;
+
+public class AlohaClient {
+
+  public static void main(String[] args) {
+
+    InputStreamReader is = new InputStreamReader(System.in);
+    BufferedReader br = new BufferedReader(is);
+
+    File file = new File(res.str("path.CLNTFILES"));
+
+    try {
+      System.out.println(res.str("usr.WELCOME") //$NON-NLS-1$
+          + res.str("usr.ASKHNAME")); //$NON-NLS-1$
+
+      String hostName = br.readLine();
+
+      if (hostName.length() == 0) {
+        // If user did not enter a name
+        // use the default host name
+        hostName = res.str("addr.IP");
+      }
+
+      // Asks for the port number. If this is blank the default port
+      // number from res.properties is used.
+      System.out.println(res.str("usr.ASKPNUM")); //$NON-NLS-1$
+      String portNum = br.readLine();
+
+      if (portNum.length() == 0) {
+        // default port number
+        portNum = res.str("addr.PORT"); //$NON-NLS-1$
+      }
+
+      AlohaSocket socket = null;      
+      socket = new AlohaSocket(InetAddress.getByName(hostName), Integer.parseInt(portNum));
+
+      // Used to hold res to be sent to the server
+      String message = new String();
+
+      // Used to hold responses from the server.
+      String response = new String();
+
+      while (!message.equalsIgnoreCase("aloha")) {
+        System.out.println(res.str("usr.LOGINMSG")); //$NON-NLS-1$
+        message = br.readLine().trim();
+      }
+
+      // Says "aloha" to the server
+      socket.sendMessage(message);
+      response = socket.receiveMessage();
+
+      // Sends a file to the server after getting a "welcome" reply.
+      if (response.equalsIgnoreCase("welcome")) {
+        socket.sendFile(file);
+        response = socket.receiveMessage();
+
+        System.out.println(response);
+
+        // Closes the connection if the server acknowledges a successful upload.
+        if (response.contains(file.length() + " bytes has been uploaded correctly")) {
+          System.out.println("We're all pau.");
+          socket.close();
+        }
+      }
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    } // end try/catch
+  } // end main
+}
+</code>
+</pre>
+</div>

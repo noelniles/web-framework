@@ -1,0 +1,4 @@
+.side-nav li:hover, .side-nav.active
+{
+  background-color: #c6ff00;
+}

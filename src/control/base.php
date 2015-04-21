@@ -34,11 +34,11 @@ function get_title() {
         $page  = $_GET['page'];
         $title = preg_replace( '/[^a-z0-9.]/i', ' ' , $page);
     } else {
-        $title = "NOEL NILES";
+        $title = "Noel Niles";
     } 
     if (isset($title) && !empty($title)) {
-        print strtoupper($title);
-    }else print ('NOEL NILES | HOME');
+        print $title;
+    }else print ('Noel Niles | Home');
 
 }
 function get_page_content()
@@ -49,20 +49,20 @@ function get_page_content()
         $thisPage = 'home';
     }
     switch ($thisPage) {
-        case "projects";
-            $includeFile = PAGES . "posts/projects.php";
+        case "Projects";
+            $includeFile = PAGES . "posts/Projects.php";
             break;
-        case "github";
-            $includeFile = PAGES . "posts/github.php";
+        case "Github";
+            $includeFile = PAGES . "posts/Github.php";
             break;
-        case "experiments";
-            $includeFile = PAGES . "posts/experiments.php";
+        case "Experiments";
+            $includeFile = PAGES . "posts/Experiments.php";
             break;
-        case "resume";
-            $includeFile = PAGES . "posts/resume.php";
+        case "Resume";
+            $includeFile = PAGES . "resume/Resume.php";
             break;
         default:
-            $includeFile = PAGES . 'home.php';
+            $includeFile = PAGES . 'Home.php';
             break;
     }
     require_once($includeFile);
@@ -74,14 +74,16 @@ function get_page_content()
 function display_post_summary($dir)
 {
     if ($handle = opendir($dir)) {
-        while (false !== ($entry = readdir($handle))) {
+        while (false != ($entry = readdir($handle))) {
+            if (!preg_match("/\.(swp|jpg|png|java|c|py)*$/i", $entry, $matches)) { 
             //Don't grab the root or parent directory files
-            if ($entry != "." && $entry != "..") {
-                $content = file_get_contents("$dir/" . "$entry");
-                if ($content === false) {
-                    echo "<h1>Something is wrong!</h1>";
-                } else {
-                    echo $content;
+                if ($entry != "." && $entry != "..") {
+                    $content = file_get_contents("$dir/" . "$entry");
+                    if ($content === false) {
+                        echo "<h1>Something is wrong!</h1>";
+                    } else {
+                        echo $content;
+                    }
                 }
             }
         }
