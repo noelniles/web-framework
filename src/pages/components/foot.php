@@ -15,7 +15,6 @@
   </div>
 </footer>
 <!-- Compiled and minified JavaScript -->
-<script src="<?php echo JS . 'jquery.js'; ?>"></script>
 <script src="<?php echo JS . 'materialize.js'; ?>"></script>
 <script src="<?php echo JS . 'okaida-prism.js'; ?>"></script>
 </body>
