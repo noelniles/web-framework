@@ -17,7 +17,7 @@
 
     <div class="col s6">
         <h5 class="thin">Education</h5>
-        <ul class="grey-text">
+        <ul class="grey-text dot">
             <li>Hawaii Pacific University: BS Comp. Sci.</li>
             <li>File Handling in Linux</li>
             <li>Linux and the CLI</li>
@@ -31,11 +31,11 @@
 
     <div class="col s6">
         <h5 class="thin">Experience</h5>
-        <ul class="grey-text">
-            <li>Hawaii Pacific University: BS Comp. Sci.</li>
-            <li>File Handling in Linux</li>
-            <li>Linux and the CLI</li>
-            <li>Comptia Linux 2004: Docs and Hardware</li>
+        <ul class="grey-text dot">
+            <li>Deployed and administered server cluster with 26 nodes</li>
+            <li>Created wiki page to document cluster architecture</li>
+            <li>Built PHP/Javascript based web gallery for local tattoo artist</li>
+            <li>Ported a bash based CMS to Python for fun</li>
         </ul>
     </div>
 

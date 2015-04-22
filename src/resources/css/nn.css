@@ -1,4 +1,18 @@
+/*
+ *change the bgrd color of the side-nav
+ */
 .side-nav li:hover, .side-nav li.active
 {
   background-color: #c6ff00;
+}
+
+ul.grey-text.dot > li 
+{
+  list-style-type: circle;
+
+}
+
+.php 
+{
+    background-color: #7986ab;
 }

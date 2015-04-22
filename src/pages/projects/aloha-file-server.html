@@ -1,21 +1,23 @@
 <div class="section">
-<h3 class="title thin red-text text-darken-4">Aloha File Server</h3>
-<p class="flow-text">As an assignment for my Data Communications class I wrote a client/server
-program in Java. The major hurdles were figuring out where and how to catch
-errors without catastrophically crashing the program.
-</p>
+  <h3 class="title thin red-text text-darken-4">Aloha File Server</h3>
+  <p class="flow-text">As an assignment for my Data Communications class I wrote a client/server
+  program in Java. The major hurdles were figuring out where and how to catch
+  errors without catastrophically crashing the program.
+  </p>
 
-<p class="flow-text">I found the best strategy for catching exceptions is to catch them as close
-to the point where they occured. For example, in the Aloha File Server there
-is an AlohaSocket class that manages all of the connection setup and 
-message/response handling. The classes utilize AlohaSocket shouldn't need to 
-try/catch a bunch of errors which is what would happen if AlohaSocket just 
-throws errors to the caller instead of dealing with them.
-<p>
+  <p class="flow-text">I found the best strategy for catching exceptions is to catch them as close
+  to the point where they occured. For example, in the Aloha File Server there
+  is an AlohaSocket class that manages all of the connection setup and 
+  message/response handling. The classes utilize AlohaSocket shouldn't need to 
+  try/catch a bunch of errors which is what would happen if AlohaSocket just 
+  throws errors to the caller instead of dealing with them.
+  <a class="waves-effect waves-light btn cyan accent-4"><i class="mdi-action-system-update-tv left"></i>View Code</a>
+  <p>
 </div>
-<div class="section">
-<h6 class="thin">AlohaSocket.java</h6>
-<pre title="AlohaSocket.java">
+<!-- begin-read-more -->
+<div class="section read">
+  <h6 class="thin">AlohaSocket.java</h6>
+  <pre title="AlohaSocket.java">
 <code title="AlohaSocket.java" class="language-java">
 package com.noelniles.alohafileserver;
 
@@ -157,12 +159,12 @@ public class AlohaSocket {
   }
 }
 </code>
-</pre>
+  </pre>
 </div>
 
 <div class="section">
-<h6 class="thin">AlohaServer.java</h6>
-<pre><code class="language-java">
+  <h6 class="thin">AlohaServer.java</h6>
+  <pre><code class="language-java">
 package com.noelniles.alohafileserver;
 
 import java.io.File;
@@ -173,7 +175,7 @@ import java.util.UUID;
 public class AlohaServer {
   //This should be 1024-65535 because lower ports are used by many common programs
   private static int serverPort = Integer.parseInt(res.str("addr.PORT")); //$NON-NLS-1$
-  
+
   //Holds responses that are sent to the client
   private static String message;
 
@@ -189,7 +191,7 @@ public class AlohaServer {
     if (args.length == 1) {
       serverPort = Integer.parseInt(args[0]);
     }
-    
+
     // Uses try-with-resources so there is no need to call close() on the socket.
     try (ServerSocket socket = new ServerSocket(serverPort)) {
       System.out.println(res.str("usr.SRVRDY")); //$NON-NLS-1$
@@ -207,7 +209,7 @@ public class AlohaServer {
         } catch (SecurityException e) {
           System.out.println(res.str("err.SECEXCEPT") + ""); //$NON-NLS-1$                                      
         }
-        
+
         // Connection succeeded
         System.out.println(res.str("conn.SUCCESS")); //$NON-NLS-1$
 
@@ -236,12 +238,12 @@ public class AlohaServer {
   } // end main
 }
 </code>
-</pre>
+  </pre>
 </div>
 
 <div class="section">
-<h6 class="thin">AlohaClient.java</h6>
-<pre><code class="language-java">
+  <h6 class="thin">AlohaClient.java</h6>
+  <pre><code class="language-java">
 package com.noelniles.alohafileserver;
 
 import java.io.BufferedReader;
@@ -317,5 +319,10 @@ public class AlohaClient {
   } // end main
 }
 </code>
-</pre>
+  </pre>
 </div>
+<script>
+$(".btn").click(function(){
+  $(".readmore").toggleClass("hide");
+});
+</script>
