@@ -41,5 +41,11 @@
 
     <div class="col s6">
         <h5 class="thin">Skills</h5>
+        <ul class="grey-text dot">
+            <li>HTML, CSS, PHP, Javascript...(I can build websites)</li>
+            <li>Java, C, C++, Python...(I can write powerful programs)</li>
+            <li>Linux, Apache, MySQL...(I can manage servers)</li>
+            <li>Cryptography, Security, Privacy...(I know how to keep data safe)</li>
+        </ul>
     </div>
 

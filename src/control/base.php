@@ -35,11 +35,12 @@ define('PAGES', ROOT . 'src/pages/');
 define('DEFAULT_TITLE', 'Noel Niles');
 function get_title() {
   if(isset($_GET['page'])) {
-    $title = filter_input(INPUT_GET, $_GET['page'], FILTER_SANITIZE_SPECIAL_CHARS);
+    $title = filter_var($_GET['page'], FILTER_SANITIZE_STRING);
   
   } else {
     $title = DEFAULT_TITLE;
   }
+  echo $title;
 }
 
 function get_page_content()
