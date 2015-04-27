@@ -1,3 +1,5 @@
+<h2 class="header">Projects Hosted on Github...</h2>
+<div class="section">
 <table class="bordered hoverable">
   <thead>
   <tr>
@@ -10,7 +12,7 @@
 <tbody class="github">
 </tbody>
 </table>
-
+</div>
 <script>
 $.getJSON('https://api.github.com/users/shakabra/repos?callback=?', 
 function(d) {
