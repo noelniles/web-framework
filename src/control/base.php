@@ -32,7 +32,7 @@ define('JS', ROOT . 'src/resources/js/');
 define('PAGES', ROOT . 'src/pages/');
 
 // Default page title
-define('DEFAULT_TITLE', 'Noel Niles');
+define('DEFAULT_TITLE', 'Noel Niles | Web Development and Security Specialist');
 function get_title() {
   if(isset($_GET['page'])) {
     $title = filter_var($_GET['page'], FILTER_SANITIZE_STRING);
