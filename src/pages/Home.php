@@ -7,3 +7,4 @@ learn and maybe to teach somebody else in the process. My areas of interest
 include network programming, information security, cryptography, online privacy,
 and creating a world where machines do the bidding of their Human Overlords.
 </p>
+<?php display_post_summary('src/pages/posts/frontpage'); ?>
