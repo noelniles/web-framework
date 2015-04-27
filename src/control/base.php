@@ -13,6 +13,7 @@ function tsl($path)
     $path .= '/';
   }
 }
+
 function get_root_path()
 {
   $pos = strrpos(dirname(__FILE__), DIRECTORY_SEPARATOR . 'web-framework/src');
@@ -30,17 +31,15 @@ define('CSS', ROOT . 'src/resources/css/');
 define('JS', ROOT . 'src/resources/js/');
 define('PAGES', ROOT . 'src/pages/');
 
+// Default page title
+define('DEFAULT_TITLE', 'Noel Niles');
 function get_title() {
-  if (isset($_GET['page'])) {
-    $page  = $_GET['page'];
-    $title = preg_replace( '/[^a-z0-9.]/i', ' ' , $page);
+  if(isset($_GET['page'])) {
+    $title = filter_input(INPUT_GET, $_GET['page'], FILTER_SANITIZE_SPECIAL_CHARS);
+  
   } else {
-    $title = "Noel Niles";
-  } 
-  if (isset($title) && !empty($title)) {
-    print $title;
-  }else print ('Noel Niles | Home');
-
+    $title = DEFAULT_TITLE;
+  }
 }
 
 function get_page_content()
