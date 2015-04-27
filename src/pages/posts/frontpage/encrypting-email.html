@@ -1,33 +1,36 @@
 <div class="section">
-<h4 class="header grey-text text-darken-2">Everyone Should Have a PGP Key.</h4>
-<h6 class="post-date thin grey-text">27 April 2015</h6> 
+    <h4 class="header grey-text text-darken-2">Everyone Should Have a PGP Key.</h4>
+    <h6 class="post-date thin grey-text">27 April 2015</h6> 
 
-<p class="flow-text">
-If you are an Internet user and I'm guessing you are because you are reading 
-this. Then there is one thing that you can do today to make the Internet a 
-better place. Create an OpenPGP key and post it on a well known server like
-<a href="https://pgp.mit.edu" target"_blank">pgp.mit.edu</a>.
-</p>
+    <p class="flow-text">
+    If you are an Internet user and I'm guessing you are because you are reading 
+    this. Then there is one thing that you can do today to make the Internet a 
+    better place. Create an OpenPGP key and post it on a well known server like
+    <a href="https://pgp.mit.edu" target"_blank">pgp.mit.edu</a>.
+    </p>
 
-<p class="flow-text">
-What is an OpenPGP key good for? First of all, you can use it to sign email messages.
-How do you know that email with the strange link to a PHP file is really from
-you're aunt Judy. I've had to call relatives and friends many times to tell them
-that their email account had been compromised and was spamming their contacts
-with links to malware. This one of the major ways that malware spreads. With 
-OpenPGP keys come in pairs. A sender signs an email with the private key that 
-only the sender knows. The other half of the key pair, the public key, is stored
-on a public server. Anyone who receives a signed message can check the public 
-server to make sure the senders identity is verified. Of course most modern 
-email clients will allow you to automate the whole signing process.
-</p>
+    <p class="flow-text">
+    What is an OpenPGP key good for? First of all, you can use it to sign email messages.
+    Think about it. How do you know that email with really from you're aunt 
+    Judy? I've had to call family and friends many times to tell them
+    that their email account had been compromised and was spamming their contacts
+    with links to malware. This is one of the major ways that malware spreads. 
+    </p>
 
-<p class="flow-text">
-But how do I know that the public key on the server is really from my aunt Judy
-and not some attacker who just uploaded there own key to the server. The answer
-is a Web of Trust. Take a look at the entry for my key below.
-</p>
-<pre>
+    <p class="flow-text">
+    With OpenPGP, keys come in pairs. A sender signs an email with the private key that 
+    only the sender knows. The other half of the key pair, the public key, is stored
+    on a public server. Anyone who receives a signed message can check the public 
+    server to make sure the senders identity is verified. Of course most modern 
+    email clients will allow you to automate the whole signing process.
+    </p>
+
+    <p class="flow-text">
+    But how do I know that the public key on the server is really from my aunt Judy
+    and not some attacker who just uploaded their own key to the server? The answer
+    is a Web of Trust. Take a look at the entry for my key below.
+    </p>
+    <pre>
 <code>
 Type bits/keyID     cr. time   exp time   key expir
 
@@ -41,29 +44,33 @@ sub  4096R/F39E3804 2015-01-03
 sig sbind  7206B04A 2015-01-03 __________ __________ []
 
 </code>
-</pre>
-<p class="flow-text">
-You'll see that my key is signed by me [selfsig] and my good friend Jason Favrod.
-Jason signed my key because I gave him the key fingerprint while we were hanging
-out together (in personam). He physically verified that my identity matched my
-key fingerprint. The more people that sign a key using this method the more trustworthy
-the signature. In the past we have relied on signatures and ID cards to authenticate
-messages. Those methods don't scale well. In an age of global digital communication
-we need to use stronger security. In order for the web of trust to grow more 
-people to use OpenPGP.
-</p>
-<p class="flow-text">
-I can only scratch the surface right now. PGP can be used to protect more than
-just emails; it can encrypt and sign files and documents as well.
-Below are some resources and tutorials. I can't stress enough the importance
-of generating a revocation key and keeping it safe!
-<h6 class="thin grey-text">Resources:</h6>
-<ul class="thin grey-text">
-    <li><a href="http://www.openpgp.org/">OpenPGP</a></li>
-    <li><a href="https://gnupg.org/">GnuPG</a></li>
-    <li><a href="https://ssd.eff.org/en/module/how-use-pgp-windows">How to Use PGP on a Windows PC</a></li>
-    <li><a href="https://ssd.eff.org/en/module/how-use-pgp-mac-os-x">How to Use PGP on a Mac</a></li>
-    <li><a href="https://ssd.eff.org/en/module/how-use-pgp-linux">How to Use PGP on a Linux</a></li>
-</ul>
+    </pre>
+    <p class="flow-text">
+    You'll see that my key is signed by me [selfsig] and my good friend Jason Favrod.
+    Jason signed my key because I gave him the key fingerprint while we were hanging
+    out together (in personam). He physically verified that my identity matched my
+    key fingerprint. The more people that sign a key using this method the more trustworthy
+    the signature.
+    </p>
+    <p clas="flow-text">
+    In the past we have relied on signatures and ID cards to authenticate
+    messages. Those methods don't scale well. In an age of global digital communication
+    we need to use stronger security like the web of trust. In order for the 
+    web of trust to grow more people to use OpenPGP.
+    </p>
+
+    <p class="flow-text">
+    I can only scratch the surface right now. I'm hoping to get a key signing 
+    party together around the Honolulu area.
+    Below are some resources and tutorials. I can't stress enough the importance
+    of generating a revocation key and keeping it safe!
+    <h6 class="thin grey-text">Resources:</h6>
+    <ul class="thin grey-text">
+        <li><a href="http://www.openpgp.org/">OpenPGP</a></li>
+        <li><a href="https://gnupg.org/">GnuPG</a></li>
+        <li><a href="https://ssd.eff.org/en/module/how-use-pgp-windows">How to Use PGP on a Windows PC</a></li>
+        <li><a href="https://ssd.eff.org/en/module/how-use-pgp-mac-os-x">How to Use PGP on a Mac</a></li>
+        <li><a href="https://ssd.eff.org/en/module/how-use-pgp-linux">How to Use PGP on a Linux</a></li>
+    </ul>
 </div>
 
