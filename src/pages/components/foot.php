@@ -17,5 +17,6 @@
 <!-- Compiled and minified JavaScript -->
 <script src="<?php echo JS . 'materialize.js'; ?>"></script>
 <script src="<?php echo JS . 'okaida-prism.js'; ?>"></script>
+<script src="<?php echo JS . 'nn.js'; ?>"></script>
 </body>
 </html>

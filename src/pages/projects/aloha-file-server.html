@@ -1,23 +1,25 @@
 <div class="section">
-  <h3 class="title thin red-text text-darken-4">Aloha File Server</h3>
-  <p class="flow-text">As an assignment for my Data Communications class I wrote a client/server
-  program in Java. The major hurdles were figuring out where and how to catch
-  errors without catastrophically crashing the program.
-  </p>
+    <h3 class="title thin red-text text-darken-4">Aloha File Server</h3>
+    <p class="flow-text">As an assignment for my Data Communications class I wrote a client/server
+    program in Java. The major hurdles were figuring out where and how to catch
+    errors without catastrophically crashing the program.
+    </p>
 
-  <p class="flow-text">I found the best strategy for catching exceptions is to catch them as close
-  to the point where they occured. For example, in the Aloha File Server there
-  is an AlohaSocket class that manages all of the connection setup and 
-  message/response handling. The classes utilize AlohaSocket shouldn't need to 
-  try/catch a bunch of errors which is what would happen if AlohaSocket just 
-  throws errors to the caller instead of dealing with them.
-  <a class="waves-effect waves-light btn cyan accent-4"><i class="mdi-action-system-update-tv left"></i>View Code</a>
-  <p>
+    <p class="flow-text">I found the best strategy for catching exceptions is to catch them as close
+    to the point where they occured. For example, in the Aloha File Server there
+    is an AlohaSocket class that manages all of the connection setup and 
+    message/response handling. The classes utilize AlohaSocket shouldn't need to 
+    try/catch a bunch of errors which is what would happen if AlohaSocket just 
+    throws errors to the caller instead of dealing with them.
+    <p>
 </div>
+<a class="waves-effect waves-light btn cyan accent-4">
+    <i class="mdi-action-system-update-tv left"></i>View Code
+</a>
 <!-- begin-read-more -->
-<div class="section read">
-  <h6 class="thin">AlohaSocket.java</h6>
-  <pre title="AlohaSocket.java">
+<div class="section read hide">
+<h6 class="thin">AlohaSocket.java</h6>
+<pre title="AlohaSocket.java">
 <code title="AlohaSocket.java" class="language-java">
 package com.noelniles.alohafileserver;
 
@@ -159,12 +161,10 @@ public class AlohaSocket {
   }
 }
 </code>
-  </pre>
-</div>
+    </pre>
 
-<div class="section">
-  <h6 class="thin">AlohaServer.java</h6>
-  <pre><code class="language-java">
+    <h6 class="thin">AlohaServer.java</h6>
+    <pre><code class="language-java">
 package com.noelniles.alohafileserver;
 
 import java.io.File;
@@ -238,12 +238,10 @@ public class AlohaServer {
   } // end main
 }
 </code>
-  </pre>
-</div>
+    </pre>
 
-<div class="section">
-  <h6 class="thin">AlohaClient.java</h6>
-  <pre><code class="language-java">
+<h6 class="thin">AlohaClient.java</h6>
+<pre><code class="language-java">
 package com.noelniles.alohafileserver;
 
 import java.io.BufferedReader;
@@ -319,10 +317,5 @@ public class AlohaClient {
   } // end main
 }
 </code>
-  </pre>
+</pre>
 </div>
-<script>
-$(".btn").click(function(){
-  $(".readmore").toggleClass("hide");
-});
-</script>

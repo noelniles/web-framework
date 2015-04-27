@@ -73,7 +73,7 @@ function get_page_content()
 /**
  * @param $dir directory where the html files are stored
  */
-function display_post_summary($dir, $size=null)
+function display_post_summary($dir)
 {
   if ($handle = opendir($dir)) {
     while (false != ($entry = readdir($handle))) {
@@ -81,15 +81,11 @@ function display_post_summary($dir, $size=null)
       if (!preg_match("/\.(swp|jpg|png|java|c|py)*$/i", $entry, $matches)) { 
         //Don't grab the root or parent directory files
         if ($entry != "." && $entry != "..") {
-          $content = file_get_contents("$dir/" . "$entry", null, null, $size);
+          $content = file_get_contents("$dir/" . "$entry");
           if ($content === false) {
             echo "<h1>Something is wrong!</h1>";
           } else {
-            $delimeter = '<!-- begin-read-more -->';
-            $html = explode($delimeter, $content);
-            $before = $html[0];
-            $after = '<div class="hide readmore">' . $html[1] . '</div>';
-            print $before . $after;
+              echo $content;
           }
         }
       }
