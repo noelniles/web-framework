@@ -4,8 +4,8 @@ RewriteEngine On
 RewriteBase /
 
 # Specify search friendly URLs
-RewriteRule ^Home$ /web-framework/index.php [L]
-RewriteRule ^Projects$ /web-framework/index.php?page=Projects [L]
-RewriteRule ^Github$ /web-framework/index.php?page=Github [L]
-RewriteRule ^Experiments$ /web-framework/index.php?page=Experiments [L]
-RewriteRule ^Resume$ /web-framework/index.php?page=Resume [L]
+RewriteRule ^Home$ /index.php [L]
+RewriteRule ^Projects$ /index.php?page=Projects [L]
+RewriteRule ^Github$ /index.php?page=Github [L]
+RewriteRule ^Experiments$ /index.php?page=Experiments [L]
+RewriteRule ^Resume$ /index.php?page=Resume [L]
