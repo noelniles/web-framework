@@ -58,7 +58,7 @@ function get_page_content()
     $includeFile = PAGES . "posts/Github.php";
     break;
     case "Experiments";
-    $includeFile = PAGES . "posts/Experiments.php";
+    $includeFile = PAGES . "experiments/Experiments.php";
     break;
     case "Resume";
     $includeFile = PAGES . "resume/Resume.php";
