@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<body>
+<div class="container">
+<div class="row">
+<div class="col-md-5">
+<h2>Tic-Tac-Toe</h2>
+<table class="table table-bordered" id="game_board">
+
+  <tr height="100px">
+    <td id="0"></td>
+    <td id="1"></td>
+    <td id="2"></td>
+  </tr>
+
+  <tr height="100px">
+    <td id="3"></td>
+    <td id="4"></td>
+    <td id="5"></td>
+  </tr>
+
+  <tr height="100px">
+    <td id="6"></td>
+    <td id="7"></td>
+    <td id="8"></td>
+
+  </tr>
+
+</table>
+</div><!-- End col-md-9 -->
+
+<div class="col-md-3">
+  <form id="select_player">
+  <h3>Select a player to begin</h3>
+  <input type="radio" name="select_player" value="X">User Goes First<br>
+  <input type="radio" name="select_player" value="O">Computer Goes First<br>
+  </form>
+  <div id="message"></div>
+  <div id="outcome"></div>
+  <div id="current_board_array"></div>
+</div><!-- End col-md-3 -->
+  
+</div><!-- End row -->
+<div class="row" id="game_state">
+  <p id="player_state"></p><br>
+  <p id="board_state"></p><br>
+  <p id="free_spaces_state"></p><br>
+  <p id="outcome_state"></p><br>
+</div>
+</div><!-- End container -->
+<script>
+$(document).ready(function(){
+  $("input:radio[name=select_player]").attr('disabled', false);
+  $('td').html('');
+});
+
+$('input:radio[name=select_player]').click(function(){
+  $(this).attr('disabled', true);
+  game.player = $(this).val();
+  while (game.next_move()){
+   //; 
+  }
+
+});
+
+game = {
+  player : '',                    // current player
+  xtkn : '<h3>X</h3>',            // symbol player-X puts on the board
+  otkn : '<h3>O</h3>',            // symbol player-O puts on the board
+  board : ['','','',              // 9x9 tic-tac-toe board
+           '','','',
+           '','',''],
+  winning_sets : [[0,1,2],[3,4,5],[6,7,8],
+                  [0,3,6],[1,4,5],[2,5,8],
+                  [0,4,8],[2,4,6]],
+  free_spaces : 9,                // number of free spaces is decremented on each move
+  outcome : 'N',                   // |W|in, |D|raw, |N|one
+
+  display_state : function(){
+    $('#player_state').html('current player state: ' + this.player + '<br>');
+    $('#board_state').html('current board state: ' + this.board.toString() + '<br>');
+    $('#free_spaces_state').html('current free spaces: ' + this.free_spaces.toString() + '<br>');
+    $('#outcome_state').html('current outcome state: ' + this.outcome + '<br>');
+  },
+
+  msg :
+    function(msg){
+      var message = '<div class="alert alert-info">'
+        + msg + '</div>';
+      $('#message').html(message);
+    },
+
+  outcome_msg :
+    function(msg){
+      var message = '<div class="alert alert-success">'
+        + msg + '</div>';
+      $('#outcome').html(message);
+    },
+
+  current_board : 
+    function(){
+      $('#current_board_array').html(this.board.toString());
+    },
+
+  allowed :
+    function(bi, id, player){
+      if (this.board[bi] == 'X' || this.board[bi] == 'O'){
+        return false;
+      } else if (this.board[bi] == ''){
+        // put users token into board array
+        this.board[bi] = player;
+        // Gets token for current player
+        var token = (player == 'X') ? this.xtkn : this.otkn;
+        // Put token in html table
+        $(id).html(token);
+        // Switch player
+        this.player = (this.player == 'X') ? 'O' : 'X';
+        // Decrement free spaces;
+        this.free_spaces--;
+        // Display current board
+        this.current_board();
+        return true;
+      } else {
+        this.msg("I don't know what that is" + '<br>board index ' + bi + '<br>identifier ' + id + '<br>player ' + player);
+      }
+    },
+
+  // Computer's move
+  omove :
+    function(){
+      if (this.can_win_now()){
+          return true;
+      } else {
+        this.random_move();
+      }
+      return (this.game_over()) ? false : true;
+    },
+  
+  // User's move
+  xmove :
+    function(){
+
+      var that = this;
+      $('td').click(function(){
+        var id = $(this).attr('id');
+        var bi = parseInt(id);
+        id = "#" + id;
+
+        // if the move is legal and the game is not over return true
+        return (that.allowed(bi, id, 'X')) && (! that.game_over()) ? true : false; 
+      });
+    },
+
+  game_over :
+    function(){
+    var p = (this.player == 'X') ? 'O' : 'X';
+      if (this.won()){
+
+        this.outcome_msg(p + ' has won');
+        return true;
+
+      } else if (this.tie()){
+
+        this.outcome_msg('<p>the game is tied</p>');
+        return true;
+
+      } else {
+
+        this.next_move();
+
+      }
+    },
+
+  won :
+    function(){
+
+      // References individual elements in a winning set
+      var w1, w2, w3;
+
+      // References the square on the board to test against wins
+      var b1, b2, b3;
+
+      // If it's O's turn and outcome is |W|in then O wins
+      if(this.player == 'O' && this.outcome == 'W'){
+
+        return true;
+
+      } else {
+
+        // Checks if 'X' has won
+        for (var i = 0; i <= 7; i++){
+
+          w1 = this.winning_sets[i][0];
+          w2 = this.winning_sets[i][1];
+          w3 = this.winning_sets[i][2];
+
+          b1 = this.board[w1];
+          b2 = this.board[w2];
+          b3 = this.board[w3];
+
+          if (b1 == 'X' && b2 == 'X' && b3 == 'X'){
+            return true;
+          }
+        }
+      }
+      return false;
+    },
+
+  tie :
+    function(){
+
+      if (this.free_spaces == 0){
+
+        this.outcome = 'D';
+        return true;
+
+      } else {
+
+        return false;
+      }
+    },
+
+  next_move :
+    function(){
+      this.display_state();
+
+      if (this.player == 'X'){
+
+        if (this.xmove()){
+          return (this.game_over()) ? false : true;
+        }
+
+      } else if (this.player == 'O'){
+
+        if (this.omove()){
+          return (this.game_over()) ? false : true;
+        }
+      }
+    },
+
+  random_move :
+    function(){
+      var bi = Math.floor((Math.random()*this.board.length));
+      var id = '#' + bi.toString();
+      
+      if (this.allowed(bi, id, 'O')){
+        return true;
+      } else {
+        this.random_move();
+      }
+      
+    },
+  can_win_now : 
+    function(){
+      var that = this;
+      this.winning_sets.forEach(function(ws){
+        var b1 = that.board[ws[0]];
+        var b2 = that.board[ws[1]];
+        var b3 = that.board[ws[2]];
+
+        if(b1 == '' && b2 == 'O' && b3 == 'O'){
+          var id = '#' + ws[0].toString();
+          if (that.allowed(ws[0], id, 'O')){
+            that.outcome = 'W';
+            return true;
+          }
+        } else if (b1 == 'O' && b2 == '' && b3 == 'O'){
+          var id = '#' + ws[1].toString();
+          if (that.allowed(ws[1], id, 'O')){
+            that.outcome = 'W';
+            return true;
+          }
+        } else if (b1 == 'O' && b2 == 'O' && b3 == ''){
+            var id = '#' + ws[2].toString();
+            if (that.allowed(ws[2], id, '0')){
+              that.outcome = 'W';
+              return true;
+            }
+        } else return false;
+      });
+    },
+};
+</script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</body>
+</html>
